@@ -1,6 +1,6 @@
 
-import { useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   PawPrint,
   ArrowLeft,
@@ -12,6 +12,7 @@ import {
   Stethoscope,
   ClipboardCheck,
   Upload,
+  ImagePlus,
   FileText,
   X,
   Info,
@@ -132,15 +133,49 @@ function isValidCPF(value) {
 export default function PetRegistration() {
   const formRef = useRef(null);
   const fileInputRef = useRef(null);
+  const avatarInputRef = useRef(null);
+  const navigate = useNavigate();
 
   const [currentStep, setCurrentStep] = useState(0);
   const [selectedVaccines, setSelectedVaccines] = useState([]);
   const [files, setFiles] = useState([]);
+  const [filePreviews, setFilePreviews] = useState([]);
+  const [avatarFile, setAvatarFile] = useState(null);
+  const [avatarPreview, setAvatarPreview] = useState('');
+
+  // Cria miniaturas temporárias para imagens e URLs locais para abrir PDFs.
+  useEffect(() => {
+    const previews = files.map((file) => ({
+      name: file.name,
+      type: file.type,
+      size: file.size,
+      url: URL.createObjectURL(file),
+    }));
+    setFilePreviews(previews);
+
+    return () => previews.forEach((preview) => URL.revokeObjectURL(preview.url));
+  }, [files]);
+
+  useEffect(() => {
+    if (!avatarFile) {
+      setAvatarPreview('');
+      return undefined;
+    }
+    const previewUrl = URL.createObjectURL(avatarFile);
+    setAvatarPreview(previewUrl);
+    return () => URL.revokeObjectURL(previewUrl);
+  }, [avatarFile]);
+
   const [hasAllergy, setHasAllergy] = useState("");
   const [usesMedication, setUsesMedication] = useState("");
   const [formStatus, setFormStatus] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [toast, setToast] = useState(null);
+
+  const showToast = (message, type = "success") => {
+    setToast({ message, type });
+  };
 
   const progress = ((currentStep + 1) / steps.length) * 100;
 
@@ -195,6 +230,22 @@ export default function PetRegistration() {
 
   const removeFile = (index) => {
     setFiles((current) => current.filter((_, i) => i !== index));
+  };
+
+  const handleAvatarFile = (event) => {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) return;
+    if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+      setFormStatus("A foto do pet deve estar em JPG, PNG ou WebP.");
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setFormStatus("A foto do pet deve ter no máximo 5 MB.");
+      return;
+    }
+    setAvatarFile(file);
+    setFormStatus("");
   };
 
   const validateCurrentStep = () => {
@@ -318,6 +369,7 @@ export default function PetRegistration() {
         address: getValue("address"),
         phone: getValue("phone"),
         email: getValue("email"),
+        whatsappConsent: checked("whatsappConsent"),
       },
       pet: {
         name: getValue("petName"),
@@ -358,16 +410,18 @@ export default function PetRegistration() {
     const formData = new FormData();
     formData.append("payload", JSON.stringify(payload));
     files.forEach((file) => formData.append("vaccinationCards", file));
+    if (avatarFile) formData.append("avatar", avatarFile);
 
     const apiBaseUrl = (import.meta.env.VITE_API_URL || "http://localhost:3333")
       .replace(/\/+$/, "");
+    const apiRoot = apiBaseUrl.endsWith("/api") ? apiBaseUrl : `${apiBaseUrl}/api`;
 
     setIsSubmitting(true);
     setFormStatus("");
 
     try {
       const response = await fetch(
-        `${apiBaseUrl}/api/pet-registrations`,
+        `${apiRoot}/pet-registrations`,
         {
           method: "POST",
           body: formData,
@@ -389,15 +443,25 @@ export default function PetRegistration() {
       }
 
       setIsSubmitted(true);
-      setFormStatus(
-        result.message ||
-        "Cadastro enviado com sucesso! Aguarde o contato da equipe."
-      );
+      setFormStatus("");
+      showToast("Cadastro realizado com sucesso! 🐾 Estamos preparando tudo por aqui.");
+
+      // Dá tempo para a pessoa visualizar o toast antes de abrir a confirmação.
+      window.setTimeout(() => {
+        navigate("/cadastro-sucesso", {
+          replace: true,
+          state: {
+            petName: payload.pet.name,
+            tutorName: payload.guardian.name,
+          },
+        });
+      }, 1500);
     } catch (error) {
-      setFormStatus(
+      const message =
         error.message ||
-        "Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente."
-      );
+        "Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.";
+      setFormStatus(message);
+      showToast(message, "error");
     } finally {
       setIsSubmitting(false);
     }
@@ -409,6 +473,41 @@ export default function PetRegistration() {
 
   return (
     <div className="min-h-screen bg-[#fffdf8] font-sans text-stone-800">
+      {toast && (
+        <div
+          role="status"
+          aria-live="polite"
+          className={`fixed right-4 top-4 z-[100] flex w-[calc(100%-2rem)] max-w-md items-start gap-3 rounded-2xl border p-4 shadow-2xl sm:right-6 sm:top-6 ${
+            toast.type === "error"
+              ? "border-red-200 bg-white text-red-900"
+              : "border-emerald-200 bg-emerald-950 text-white"
+          }`}
+        >
+          <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl ${
+            toast.type === "error" ? "bg-red-50 text-red-600" : "bg-emerald-800 text-emerald-200"
+          }`}>
+            {toast.type === "error" ? <AlertCircle size={21} /> : <Check size={21} />}
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="font-extrabold">
+              {toast.type === "error" ? "Ops! Não foi dessa vez." : "Cadastro enviado! 🎉"}
+            </p>
+            <p className={`mt-1 text-sm leading-5 ${
+              toast.type === "error" ? "text-red-700" : "text-emerald-100"
+            }`}>
+              {toast.message}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setToast(null)}
+            aria-label="Fechar aviso"
+            className="rounded-lg p-1 opacity-75 transition hover:bg-white/10 hover:opacity-100"
+          >
+            <X size={18} />
+          </button>
+        </div>
+      )}
       {/* NAVBAR */}
       <header className="sticky top-0 z-50 border-b border-emerald-950/5 bg-[#fffdf8]/95 shadow-sm shadow-emerald-950/[0.02] backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
@@ -650,6 +749,38 @@ export default function PetRegistration() {
                     </FormField>
                   </div>
 
+                  <div className="sm:col-span-2">
+                    <FormField
+                      label="Foto do pet (opcional)"
+                      hint="Envie uma foto para ajudar nossa equipe a identificar seu companheiro. JPG, PNG ou WebP, até 5 MB."
+                    >
+                      <input
+                        ref={avatarInputRef}
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp"
+                        onChange={handleAvatarFile}
+                        className="hidden"
+                      />
+                      <div className="flex flex-col gap-4 rounded-2xl border border-dashed border-emerald-200 bg-emerald-50/40 p-4 sm:flex-row sm:items-center">
+                        <div className="h-28 w-28 shrink-0 overflow-hidden rounded-2xl border border-emerald-100 bg-white">
+                          {avatarPreview ? (
+                            <img src={avatarPreview} alt="Pré-visualização da foto do pet" className="h-full w-full object-cover" />
+                          ) : (
+                            <div className="grid h-full w-full place-items-center text-emerald-700"><PawPrint size={34} /></div>
+                          )}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-sm font-bold text-emerald-950">{avatarFile ? avatarFile.name : "Adicione uma foto do seu pet"}</p>
+                          <p className="mt-1 text-xs leading-5 text-stone-500">Uma foto frontal, com boa iluminação, ajuda a equipe a reconhecer seu pet.</p>
+                          <div className="mt-3 flex flex-wrap gap-2">
+                            <button type="button" onClick={() => avatarInputRef.current?.click()} title="Selecionar foto do pet" className="inline-flex items-center gap-2 rounded-xl bg-emerald-800 px-3.5 py-2 text-xs font-bold text-white transition hover:bg-emerald-900"><ImagePlus size={15} />{avatarFile ? "Trocar foto" : "Escolher foto"}</button>
+                            {avatarFile && <button type="button" onClick={() => setAvatarFile(null)} title="Remover foto selecionada" className="rounded-xl border border-stone-200 bg-white px-3.5 py-2 text-xs font-semibold text-stone-600 hover:bg-stone-50">Remover</button>}
+                          </div>
+                        </div>
+                      </div>
+                    </FormField>
+                  </div>
+
                   <FormField label="Raça" required>
                     <input
                       name="breed"
@@ -773,32 +904,41 @@ export default function PetRegistration() {
                     </button>
 
                     {files.length > 0 && (
-                      <div className="mt-3 space-y-2">
-                        {files.map((file, index) => (
-                          <div
-                            key={`${file.name}-${index}`}
-                            className="flex items-center justify-between gap-3 rounded-xl bg-stone-50 p-3"
-                          >
-                            <div className="flex min-w-0 items-center gap-2">
-                              <FileText
-                                size={18}
-                                className="shrink-0 text-emerald-700"
-                              />
-                              <span className="truncate text-xs font-semibold text-stone-700">
-                                {file.name}
-                              </span>
-                            </div>
-
-                            <button
-                              type="button"
-                              onClick={() => removeFile(index)}
-                              aria-label={`Remover ${file.name}`}
-                              className="grid h-8 w-8 shrink-0 place-items-center rounded-lg text-stone-400 transition hover:bg-red-50 hover:text-red-600"
-                            >
-                              <X size={17} />
-                            </button>
-                          </div>
-                        ))}
+                      <div className="mt-5">
+                        <div className="mb-3 flex items-center justify-between gap-3">
+                          <p className="text-xs font-extrabold uppercase tracking-[.14em] text-emerald-950">Arquivos selecionados</p>
+                          <span className="rounded-full bg-emerald-100 px-2.5 py-1 text-[11px] font-bold text-emerald-800">{files.length}/5 anexos</span>
+                        </div>
+                        <div className="grid gap-3 sm:grid-cols-2">
+                          {files.map((file, index) => {
+                            const preview = filePreviews[index];
+                            const isImage = file.type.startsWith("image/");
+                            return (
+                              <div key={`${file.name}-${file.size}-${index}`} className="group overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+                                <div className="relative flex h-36 items-center justify-center overflow-hidden bg-stone-100">
+                                  {isImage && preview ? (
+                                    <img src={preview.url} alt={`Pré-visualização de ${file.name}`} className="h-full w-full object-cover" />
+                                  ) : (
+                                    <div className="flex flex-col items-center gap-2 text-rose-600">
+                                      <FileText size={38} strokeWidth={1.5} />
+                                      <span className="rounded-full bg-rose-50 px-2.5 py-1 text-[10px] font-extrabold tracking-wider">DOCUMENTO PDF</span>
+                                    </div>
+                                  )}
+                                  <button type="button" onClick={() => removeFile(index)} title={`Remover ${file.name}`} aria-label={`Remover ${file.name}`} className="absolute right-2 top-2 grid h-8 w-8 place-items-center rounded-full bg-white/95 text-stone-600 shadow-md transition hover:bg-rose-600 hover:text-white">
+                                    <X size={16} />
+                                  </button>
+                                </div>
+                                <div className="flex min-w-0 items-center justify-between gap-2 px-3 py-3">
+                                  <div className="min-w-0">
+                                    <p title={file.name} className="truncate text-xs font-bold text-stone-800">{file.name}</p>
+                                    <p className="mt-1 text-[11px] text-stone-500">{(file.size / 1024 / 1024).toFixed(2)} MB · {isImage ? "Imagem" : "PDF"}</p>
+                                  </div>
+                                  <span className="shrink-0 rounded-lg bg-emerald-50 px-2 py-1 text-[10px] font-bold text-emerald-800">Anexado</span>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
                       </div>
                     )}
                   </FormField>
@@ -1027,6 +1167,17 @@ export default function PetRegistration() {
                     </label>
                   ))}
                 </div>
+
+                <label className="mt-5 flex cursor-pointer items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50/70 p-4 transition hover:bg-emerald-50">
+                  <input
+                    type="checkbox"
+                    name="whatsappConsent"
+                    className="mt-1 h-4 w-4 shrink-0 accent-emerald-700"
+                  />
+                  <span className="text-sm leading-6 text-emerald-950">
+                    Autorizo o Recanto da Dinda a enviar atualizações sobre o cadastro do meu pet pelo WhatsApp. Esta autorização é opcional e pode ser retirada posteriormente.
+                  </span>
+                </label>
 
                 <div className="mt-6 rounded-2xl bg-stone-50 p-5">
                   <div className="flex items-start gap-3">

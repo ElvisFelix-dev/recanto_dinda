@@ -36,3 +36,12 @@ html {
     scroll-behavior: auto;
   }
 }
+
+
+@media print {
+  body { background: #fff !important; }
+  aside, body > #root header, .print\\:hidden { display: none !important; }
+  #root main { margin: 0 !important; max-width: none !important; padding: 0 !important; }
+  #root main section, #root main > div > section { break-inside: avoid; box-shadow: none !important; }
+  #root main > div { gap: 16px !important; }
+}
