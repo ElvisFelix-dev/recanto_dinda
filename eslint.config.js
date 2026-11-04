@@ -4,10 +4,18 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import prettier from 'eslint-plugin-prettier';
 import configPrettier from 'eslint-config-prettier';
+import globals from 'globals';
 
 export default [
   {
     ignores: ['dist', 'node_modules'],
+  },
+  {
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+      },
+    },
   },
   js.configs.recommended,
   {
