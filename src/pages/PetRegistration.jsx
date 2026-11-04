@@ -369,7 +369,6 @@ export default function PetRegistration() {
         address: getValue("address"),
         phone: getValue("phone"),
         email: getValue("email"),
-        whatsappConsent: checked("whatsappConsent"),
       },
       pet: {
         name: getValue("petName"),
@@ -1167,17 +1166,6 @@ export default function PetRegistration() {
                     </label>
                   ))}
                 </div>
-
-                <label className="mt-5 flex cursor-pointer items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50/70 p-4 transition hover:bg-emerald-50">
-                  <input
-                    type="checkbox"
-                    name="whatsappConsent"
-                    className="mt-1 h-4 w-4 shrink-0 accent-emerald-700"
-                  />
-                  <span className="text-sm leading-6 text-emerald-950">
-                    Autorizo o Recanto da Dinda a enviar atualizações sobre o cadastro do meu pet pelo WhatsApp. Esta autorização é opcional e pode ser retirada posteriormente.
-                  </span>
-                </label>
 
                 <div className="mt-6 rounded-2xl bg-stone-50 p-5">
                   <div className="flex items-start gap-3">
