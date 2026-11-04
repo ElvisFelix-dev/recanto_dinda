@@ -81,7 +81,7 @@ export default function PetRegistrationSuccess() {
                 </span>
               </div>
               <p className="mt-3 text-xs font-semibold text-emerald-100/80">
-                Já estamos imaginando a bagunça boa por aqui! 😄
+                Já estamos imaginando a bagunça boa por aqui!
               </p>
             </div>
           </div>
