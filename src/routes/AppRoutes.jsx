@@ -13,6 +13,7 @@ import GuardianDetails from '../admin/pages/GuardianDetails'
 import AdminUsers from '../admin/pages/AdminUsers'
 import AdminActivity from '../admin/pages/AdminActivity'
 import AdminReports from '../admin/pages/AdminReports'
+import AdminNotifications from '../admin/pages/AdminNotifications'
 
 export default function AppRoutes() {
   return (
@@ -30,6 +31,7 @@ export default function AppRoutes() {
             <Route path="cadastros/:id" element={<RegistrationDetails />} />
             <Route path="tutores/:id" element={<GuardianDetails />} />
             <Route path="relatorios" element={<AdminReports />} />
+            <Route path="notificacoes" element={<AdminNotifications />} />
             <Route element={<ProtectedAdminRoute roles={['admin']} />}>
               <Route path="equipe" element={<AdminUsers />} />
               <Route path="atividades" element={<AdminActivity />} />

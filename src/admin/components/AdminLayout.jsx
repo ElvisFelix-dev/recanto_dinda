@@ -1,8 +1,10 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, PawPrint, LogOut, Menu, X, Dog, Users, Activity, FileBarChart2 } from 'lucide-react'
+import { LayoutDashboard, PawPrint, LogOut, Menu, X, Dog, Users, Activity, FileBarChart2, Bell } from 'lucide-react'
 import { useState } from 'react'
 import { useAdminAuth } from '../contexts/AdminAuthContext'
 import { ToastProvider } from '../contexts/ToastContext'
+import { AdminNotificationProvider } from '../contexts/AdminNotificationContext'
+import NotificationBell from './NotificationBell'
 
 export default function AdminLayout() {
   const { admin, logout } = useAdminAuth()
@@ -12,6 +14,7 @@ export default function AdminLayout() {
     { to: '/admin', label: 'Visão geral', icon: LayoutDashboard, end: true },
     { to: '/admin/cadastros', label: 'Cadastros de pets', icon: PawPrint },
     { to: '/admin/relatorios', label: 'Relatórios', icon: FileBarChart2 },
+    { to: '/admin/notificacoes', label: 'Notificações', icon: Bell },
     ...(admin?.role === 'admin' ? [
       { to: '/admin/equipe', label: 'Equipe e acessos', icon: Users },
       { to: '/admin/atividades', label: 'Histórico de atividades', icon: Activity },
@@ -25,6 +28,7 @@ export default function AdminLayout() {
 
   return (
     <ToastProvider>
+      <AdminNotificationProvider>
       <div className="min-h-screen bg-[#f5f7f3] text-slate-800">
         {mobileOpen && (
           <button
@@ -76,11 +80,12 @@ export default function AdminLayout() {
         <div className="min-h-screen min-w-0 lg:ml-72">
           <header className="sticky top-0 z-20 flex h-20 items-center justify-between border-b border-slate-200/80 bg-white/90 px-5 backdrop-blur md:px-8">
             <div className="flex items-center gap-3"><button title="Abrir menu de navegação" onClick={() => setMobileOpen(true)} className="rounded-lg p-2 hover:bg-slate-100 lg:hidden" aria-label="Abrir menu"><Menu /></button><div><p className="text-xs font-medium text-slate-400">RECANTO DA DINDA / ADMINISTRAÇÃO</p><p className="font-semibold text-slate-800">Central de gestão</p></div></div>
-            <div className="hidden items-center gap-2 rounded-full bg-[#edf4ef] px-3 py-2 text-xs font-semibold text-[#286247] sm:flex"><span className="h-2 w-2 rounded-full bg-emerald-500" />{admin?.role === 'admin' ? 'Administrador' : 'Gerente'}</div>
+            <div className="flex items-center gap-3"><NotificationBell /><div className="hidden items-center gap-2 rounded-full bg-[#edf4ef] px-3 py-2 text-xs font-semibold text-[#286247] sm:flex"><span className="h-2 w-2 rounded-full bg-emerald-500" />{admin?.role === 'admin' ? 'Administrador' : 'Gerente'}</div></div>
           </header>
           <main className="mx-auto w-full max-w-[1500px] p-5 md:p-8"><Outlet /></main>
         </div>
       </div>
+      </AdminNotificationProvider>
     </ToastProvider>
   )
 }

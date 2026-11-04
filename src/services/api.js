@@ -162,6 +162,27 @@ export const adminApi = {
   },
   removePetAvatar: (id) =>
     apiRequest(`/admin/pets/${id}/avatar`, { method: 'DELETE' }),
+
+  // Central de notificações administrativas
+  getNotifications: (params = {}) => {
+    const query = queryString(params);
+    return apiRequest(`/admin/notifications${query ? `?${query}` : ''}`);
+  },
+  markNotificationRead: (id) =>
+    apiRequest(`/admin/notifications/${id}/read`, { method: 'PATCH' }),
+  markAllNotificationsRead: () =>
+    apiRequest('/admin/notifications/read-all', { method: 'PATCH' }),
+  getPushPublicKey: () => apiRequest('/admin/notifications/push/public-key'),
+  savePushSubscription: (subscription) =>
+    apiRequest('/admin/notifications/push/subscribe', {
+      method: 'POST',
+      body: JSON.stringify({ subscription }),
+    }),
+  removePushSubscription: (endpoint) =>
+    apiRequest('/admin/notifications/push/subscribe', {
+      method: 'DELETE',
+      body: JSON.stringify({ endpoint }),
+    }),
 };
 
 export { API_URL as defaultApiUrl };
