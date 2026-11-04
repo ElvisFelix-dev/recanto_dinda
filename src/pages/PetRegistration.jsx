@@ -1,4 +1,4 @@
-
+RG
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -681,7 +681,7 @@ export default function PetRegistration() {
                   <FormField label="RG" required>
                     <input
                       name="rg"
-                      type="text"
+                      type="number"
                       placeholder="Digite seu RG"
                       className={inputClass}
                       required
