@@ -140,7 +140,7 @@ export default function AdminLogin() {
           <div className="mb-10 text-center lg:hidden">
             <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center overflow-hidden rounded-3xl bg-white p-2 shadow-md shadow-[#593A31]/10">
               <img
-                src="/logo-recanto.png"
+                src={imgLogo}
                 alt="Logo Recanto da Dinda"
                 className="h-full w-full object-contain"
               />
