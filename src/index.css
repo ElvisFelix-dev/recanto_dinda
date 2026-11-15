@@ -45,3 +45,18 @@ html {
   #root main section, #root main > div > section { break-inside: avoid; box-shadow: none !important; }
   #root main > div { gap: 16px !important; }
 }
+
+
+/* Recanto da Dinda 2.0 — identidade rosa, marrom, bege e branco */
+:root {
+  --rd-pink: #d94d91;
+  --rd-brown: #593a31;
+  --rd-beige: #fff8f3;
+  --rd-cream: #f8eee8;
+}
+body { background: var(--rd-beige); color: var(--rd-brown); }
+html { scrollbar-color: var(--rd-brown) var(--rd-beige); }
+::-webkit-scrollbar-track { background: var(--rd-beige); }
+::-webkit-scrollbar-thumb { background: var(--rd-brown); border-color: var(--rd-beige); }
+::-webkit-scrollbar-thumb:hover { background: var(--rd-pink); }
+::selection { background: #fce2ed; color: var(--rd-brown); }

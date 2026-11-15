@@ -149,7 +149,7 @@ export const adminApi = {
     const query = queryString(params);
     return downloadFile(
       `/admin/reports/registrations.csv${query ? `?${query}` : ''}`,
-      'relatorio-pets.csv',
+      'relatorio-completo-recanto.csv',
     );
   },
   updatePetAvatar: (id, file) => {
@@ -186,3 +186,87 @@ export const adminApi = {
 };
 
 export { API_URL as defaultApiUrl };
+
+
+export const hotelApi = {
+  submitBooking: (payload, files) => {
+    const formData = new FormData()
+    formData.append('payload', JSON.stringify(payload))
+    files.forEach((file) => formData.append('vaccinationCards', file))
+    return apiRequest('/hotel/bookings', { method: 'POST', body: formData })
+  },
+  getBooking: (id) => apiRequest(`/admin/hotel/bookings/${id}`),
+  getBookings: (params = {}) => {
+    const query = queryString(params)
+    return apiRequest(`/admin/hotel/bookings${query ? `?${query}` : ''}`)
+  },
+  updateBooking: (id, payload) => apiRequest(`/admin/hotel/bookings/${id}/status`, { method: 'PATCH', body: JSON.stringify(payload) }),
+  getAttendance: (params = {}) => {
+    const query = queryString(params)
+    return apiRequest(`/admin/attendance${query ? `?${query}` : ''}`)
+  },
+  getAttendanceRoster: (params = {}) => {
+    const query = queryString(params)
+    return apiRequest(`/admin/attendance/roster${query ? `?${query}` : ''}`)
+  },
+  checkInBatch: (petIds) =>
+    apiRequest('/admin/attendance/check-in-batch', {
+      method: 'POST',
+      body: JSON.stringify({ petIds }),
+    }),
+  checkOutBatch: (attendanceIds) =>
+    apiRequest('/admin/attendance/check-out-batch', {
+      method: 'POST',
+      body: JSON.stringify({ attendanceIds }),
+    }),
+  checkIn: (petId, payload = {}) => apiRequest(`/admin/pets/${petId}/check-in`, { method: 'POST', body: JSON.stringify(payload) }),
+  checkOut: (id, payload = {}) => apiRequest(`/admin/attendance/${id}/check-out`, { method: 'PATCH', body: JSON.stringify(payload) }),
+}
+
+export const guardianApi = {
+  requestAccessCode: (payload) =>
+    guardianRequest('/guardian/auth/request-access-code', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    }),
+  confirmAccess: (payload) =>
+    guardianRequest('/guardian/auth/confirm-access', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    }),
+  login: (payload) =>
+    guardianRequest('/guardian/auth/login', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    }),
+  me: () => guardianRequest('/guardian/me'),
+  attendance: () => guardianRequest('/guardian/me/attendance'),
+}
+
+async function guardianRequest(endpoint, options = {}) {
+  const token = localStorage.getItem('guardianToken')
+  const headers = { ...options.headers }
+
+  if (options.body) headers['Content-Type'] = 'application/json'
+  if (token) headers.Authorization = `Bearer ${token}`
+
+  let response
+  try {
+    response = await fetch(`${API_URL}${endpoint}`, {
+      ...options,
+      headers,
+    })
+  } catch {
+    throw new Error('Não foi possível conectar ao servidor. Verifique sua internet e tente novamente.')
+  }
+
+  const data = await response.json().catch(() => ({}))
+  if (!response.ok) {
+    if (response.status === 401 && endpoint === '/guardian/me') {
+      localStorage.removeItem('guardianToken')
+    }
+    throw new Error(data.message || 'Não foi possível concluir a solicitação.')
+  }
+
+  return data
+}

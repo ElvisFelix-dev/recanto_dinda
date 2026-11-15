@@ -12,7 +12,7 @@ function BenefitItem({ icon: Icon, title, description, color }) {
       </span>
 
       <div>
-        <h3 className="font-extrabold text-emerald-950">{title}</h3>
+        <h3 className="font-extrabold text-[#593a31]">{title}</h3>
         <p className="mt-1 text-sm leading-6 text-stone-600">
           {description}
         </p>
@@ -41,7 +41,7 @@ export default function Benefits({ benefits, photos }) {
 
           {/* IMAGEM CENTRAL */}
           <div className="relative mx-auto w-full max-w-sm">
-            <div className="absolute inset-5 rounded-full bg-orange-100 blur-2xl" />
+            <div className="absolute inset-5 rounded-full bg-[#fce2ed] blur-2xl" />
 
             <img
               src={photos.grass}
@@ -50,7 +50,7 @@ export default function Benefits({ benefits, photos }) {
               className="relative h-[300px] w-full rounded-[3rem] object-cover shadow-lg sm:h-[380px]"
             />
 
-            <span className="absolute -bottom-4 -left-3 grid h-16 w-16 place-items-center rounded-2xl border-4 border-white bg-orange-400 text-white shadow-lg">
+            <span className="absolute -bottom-4 -left-3 grid h-16 w-16 place-items-center rounded-2xl border-4 border-white bg-[#d94d91] text-white shadow-lg">
               <PawPrint size={30} />
             </span>
           </div>
@@ -64,8 +64,8 @@ export default function Benefits({ benefits, photos }) {
         </div>
 
         {/* AVISO DE ADMISSÃO */}
-        <p className="mx-auto mt-10 max-w-3xl rounded-2xl border border-orange-200 bg-orange-50 px-5 py-4 text-center text-sm leading-6 text-stone-700">
-          <strong className="text-emerald-950">
+        <p className="mx-auto mt-10 max-w-3xl rounded-2xl border border-[#f7dce8] bg-orange-50 px-5 py-4 text-center text-sm leading-6 text-stone-700">
+          <strong className="text-[#593a31]">
             Admissão responsável:
           </strong>{" "}
           atendimento para cães de pequeno e médio porte, sujeito a avaliação

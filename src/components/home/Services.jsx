@@ -6,7 +6,7 @@ export default function Services({ services, whatsappLink }) {
   return (
     <section
       id="servicos"
-      className="scroll-mt-24 bg-[#eef7ed] py-16 sm:py-20 lg:py-24"
+      className="scroll-mt-24 bg-[#fff0f6] py-16 sm:py-20 lg:py-24"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
@@ -20,7 +20,7 @@ export default function Services({ services, whatsappLink }) {
             ({ title, description, image, icon: Icon, color }) => (
               <article
                 key={title}
-                className="group overflow-hidden rounded-[1.5rem] border border-emerald-950/5 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-emerald-950/10"
+                className="group overflow-hidden rounded-[1.5rem] border border-[#593a31]/5 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#593a31]/10"
               >
                 <div className="relative overflow-hidden">
                   <img
@@ -38,7 +38,7 @@ export default function Services({ services, whatsappLink }) {
                 </div>
 
                 <div className="p-5 pt-6">
-                  <h3 className="text-lg font-extrabold text-emerald-950">
+                  <h3 className="text-lg font-extrabold text-[#593a31]">
                     {title}
                   </h3>
 
@@ -52,7 +52,7 @@ export default function Services({ services, whatsappLink }) {
                     )}
                     target="_blank"
                     rel="noreferrer"
-                    className="mt-4 inline-flex items-center gap-1.5 text-sm font-extrabold text-emerald-800 transition hover:text-orange-600"
+                    className="mt-4 inline-flex items-center gap-1.5 text-sm font-extrabold text-[#8b5a49] transition hover:text-[#c43d80]"
                   >
                     Saiba mais
                     <ArrowUpRight size={15} />

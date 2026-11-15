@@ -7,7 +7,7 @@ import {
 
 export default function Footer({ navItems, whatsappLink }) {
   return (
-    <footer className="bg-[#103c2e] text-white">
+    <footer className="bg-[#593a31] text-white">
       <div className="mx-auto flex max-w-7xl flex-col gap-8 px-4 py-9 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
         {/* MARCA */}
         <a
@@ -15,7 +15,7 @@ export default function Footer({ navItems, whatsappLink }) {
           className="flex items-center gap-3"
           aria-label="Recanto da Dinda - voltar ao início"
         >
-          <span className="grid h-12 w-12 place-items-center rounded-2xl bg-white/10 text-orange-300">
+          <span className="grid h-12 w-12 place-items-center rounded-2xl bg-white/10 text-[#efb5cf]">
             <PawPrint size={28} />
           </span>
 
@@ -39,7 +39,7 @@ export default function Footer({ navItems, whatsappLink }) {
             <a
               key={href}
               href={href}
-              className="transition hover:text-orange-300"
+              className="transition hover:text-[#efb5cf]"
             >
               {label}
             </a>
@@ -63,7 +63,7 @@ export default function Footer({ navItems, whatsappLink }) {
             target="_blank"
             rel="noreferrer"
             aria-label="WhatsApp do Recanto da Dinda"
-            className="grid h-11 w-11 place-items-center rounded-full bg-emerald-700 transition hover:bg-emerald-600"
+            className="grid h-11 w-11 place-items-center rounded-full bg-[#a65f7d] transition hover:bg-[#d94d91]"
           >
             <MessageCircle size={20} />
           </a>

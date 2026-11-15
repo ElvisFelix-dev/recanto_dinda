@@ -7,13 +7,13 @@ import {
 export default function FinalCTA({ whatsappLink }) {
   return (
     <section className="px-4 pb-16 sm:px-6 lg:px-8">
-      <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[2rem] bg-emerald-900 px-6 py-10 text-center sm:px-12 sm:py-14">
-        <div className="absolute -right-12 -top-16 h-52 w-52 rounded-full bg-emerald-700/70 blur-2xl" />
+      <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[2rem] bg-[#593a31] px-6 py-10 text-center sm:px-12 sm:py-14">
+        <div className="absolute -right-12 -top-16 h-52 w-52 rounded-full bg-[#a65f7d]/70 blur-2xl" />
 
-        <div className="absolute -bottom-20 -left-10 h-52 w-52 rounded-full bg-orange-400/20 blur-2xl" />
+        <div className="absolute -bottom-20 -left-10 h-52 w-52 rounded-full bg-[#d94d91]/20 blur-2xl" />
 
         <div className="relative mx-auto max-w-2xl">
-          <span className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-white/10 text-orange-300">
+          <span className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-white/10 text-[#efb5cf]">
             <Dog size={29} />
           </span>
 
@@ -32,7 +32,7 @@ export default function FinalCTA({ whatsappLink }) {
             )}
             target="_blank"
             rel="noreferrer"
-            className="mt-7 inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-orange-400 px-7 py-3.5 font-extrabold text-emerald-950 transition hover:-translate-y-0.5 hover:bg-orange-300"
+            className="mt-7 inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#d94d91] px-7 py-3.5 font-extrabold text-[#593a31] transition hover:-translate-y-0.5 hover:bg-[#efb5cf]"
           >
             <MessageCircle size={18} />
             Vamos conversar

@@ -30,7 +30,7 @@ export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen overflow-hidden bg-[#fffdf8] font-sans text-stone-800">
+    <div className="min-h-screen overflow-hidden bg-[#fff8f3] font-sans text-stone-800">
       <Navbar
         menuOpen={menuOpen}
         setMenuOpen={setMenuOpen}

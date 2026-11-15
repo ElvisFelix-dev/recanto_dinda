@@ -6,7 +6,7 @@ export default function FAQ({ faqs = [], whatsappLink }) {
   const [openIndex, setOpenIndex] = useState(0);
 
   return (
-    <section id="duvidas" className="scroll-mt-24 bg-[#f7f5ed] px-4 py-20 sm:px-6 lg:py-24">
+    <section id="duvidas" className="scroll-mt-24 bg-[#fff0f6] px-4 py-20 sm:px-6 lg:py-24">
       <div className="mx-auto max-w-4xl">
         <SectionHeading
           eyebrow="Tire suas dúvidas"
@@ -22,7 +22,7 @@ export default function FAQ({ faqs = [], whatsappLink }) {
               <div
                 key={item.question}
                 className={`overflow-hidden rounded-2xl border bg-white transition ${
-                  isOpen ? "border-[#b8c9b4] shadow-md" : "border-stone-200 shadow-sm"
+                  isOpen ? "border-[#efb5cf] shadow-md" : "border-stone-200 shadow-sm"
                 }`}
               >
                 <button
@@ -31,12 +31,12 @@ export default function FAQ({ faqs = [], whatsappLink }) {
                   onClick={() => setOpenIndex(isOpen ? -1 : index)}
                   className="flex w-full items-center justify-between gap-4 px-5 py-5 text-left sm:px-6"
                 >
-                  <span className="font-semibold text-[#173f31] sm:text-lg">
+                  <span className="font-semibold text-[#593a31] sm:text-lg">
                     {item.question}
                   </span>
                   <ChevronDown
                     size={20}
-                    className={`shrink-0 text-[#d97736] transition-transform ${
+                    className={`shrink-0 text-[#d94d91] transition-transform ${
                       isOpen ? "rotate-180" : ""
                     }`}
                   />
@@ -54,9 +54,9 @@ export default function FAQ({ faqs = [], whatsappLink }) {
           })}
         </div>
 
-        <div className="mt-9 flex flex-col items-center gap-4 rounded-2xl bg-[#123e30] px-6 py-7 text-center text-white sm:flex-row sm:justify-between sm:text-left">
+        <div className="mt-9 flex flex-col items-center gap-4 rounded-2xl bg-[#593a31] px-6 py-7 text-center text-white sm:flex-row sm:justify-between sm:text-left">
           <div className="flex items-center gap-3">
-            <span className="rounded-full bg-white/10 p-3 text-[#f5b36d]">
+            <span className="rounded-full bg-white/10 p-3 text-[#efb5cf]">
               <PawPrint size={23} />
             </span>
             <div>
@@ -71,7 +71,7 @@ export default function FAQ({ faqs = [], whatsappLink }) {
             href={whatsappLink}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-[#e88b43] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#d97736]"
+            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-[#d94d91] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#d94d91]"
           >
             <MessageCircle size={18} />
             Falar com a equipe

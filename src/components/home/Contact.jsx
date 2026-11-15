@@ -24,11 +24,11 @@ export default function Contact({ whatsappLink }) {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {/* ENDEREÇO */}
           <div className="rounded-3xl border border-stone-200/80 bg-white p-5 shadow-sm">
-            <span className="grid h-11 w-11 place-items-center rounded-2xl bg-orange-100 text-orange-700">
+            <span className="grid h-11 w-11 place-items-center rounded-2xl bg-[#fce2ed] text-[#a65f7d]">
               <MapPin size={22} />
             </span>
 
-            <h3 className="mt-4 font-extrabold text-emerald-950">
+            <h3 className="mt-4 font-extrabold text-[#593a31]">
               Endereço
             </h3>
 
@@ -44,7 +44,7 @@ export default function Contact({ whatsappLink }) {
               href="https://www.google.com/maps/search/?api=1&query=Rua+Lu%C3%ADs+Ant%C3%B4nio+dos+Santos+522+Santa+Teresinha+S%C3%A3o+Paulo"
               target="_blank"
               rel="noreferrer"
-              className="mt-4 inline-flex items-center gap-1 text-sm font-bold text-emerald-800 hover:text-orange-600"
+              className="mt-4 inline-flex items-center gap-1 text-sm font-bold text-[#8b5a49] hover:text-[#c43d80]"
             >
               Ver no mapa
               <ArrowUpRight size={14} />
@@ -53,11 +53,11 @@ export default function Contact({ whatsappLink }) {
 
           {/* WHATSAPP */}
           <div className="rounded-3xl border border-stone-200/80 bg-white p-5 shadow-sm">
-            <span className="grid h-11 w-11 place-items-center rounded-2xl bg-emerald-100 text-emerald-700">
+            <span className="grid h-11 w-11 place-items-center rounded-2xl bg-[#fce2ed] text-[#a65f7d]">
               <MessageCircle size={22} />
             </span>
 
-            <h3 className="mt-4 font-extrabold text-emerald-950">
+            <h3 className="mt-4 font-extrabold text-[#593a31]">
               Telefone / WhatsApp
             </h3>
 
@@ -69,7 +69,7 @@ export default function Contact({ whatsappLink }) {
               href={whatsappLink()}
               target="_blank"
               rel="noreferrer"
-              className="mt-4 inline-flex items-center gap-2 rounded-full bg-emerald-700 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-emerald-800"
+              className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#a65f7d] px-4 py-2.5 text-sm font-bold text-white transition hover:bg-[#8b5a49]"
             >
               <MessageCircle size={16} />
               Chamar no WhatsApp
@@ -78,11 +78,11 @@ export default function Contact({ whatsappLink }) {
 
           {/* HORÁRIOS */}
           <div className="rounded-3xl border border-stone-200/80 bg-white p-5 shadow-sm">
-            <span className="grid h-11 w-11 place-items-center rounded-2xl bg-orange-100 text-orange-700">
+            <span className="grid h-11 w-11 place-items-center rounded-2xl bg-[#fce2ed] text-[#a65f7d]">
               <Clock3 size={22} />
             </span>
 
-            <h3 className="mt-4 font-extrabold text-emerald-950">
+            <h3 className="mt-4 font-extrabold text-[#593a31]">
               Horários
             </h3>
 
@@ -110,7 +110,7 @@ export default function Contact({ whatsappLink }) {
               <Instagram size={22} />
             </span>
 
-            <h3 className="mt-4 font-extrabold text-emerald-950">
+            <h3 className="mt-4 font-extrabold text-[#593a31]">
               Instagram
             </h3>
 
@@ -122,7 +122,7 @@ export default function Contact({ whatsappLink }) {
               href="https://www.instagram.com/recanto_dadinda/"
               target="_blank"
               rel="noreferrer"
-              className="mt-4 inline-flex items-center gap-1 text-sm font-bold text-emerald-800 hover:text-orange-600"
+              className="mt-4 inline-flex items-center gap-1 text-sm font-bold text-[#8b5a49] hover:text-[#c43d80]"
             >
               Acompanhar
               <ArrowUpRight size={14} />

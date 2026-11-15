@@ -49,7 +49,7 @@ export default function Gallery({ gallery }) {
   return (
     <section
       id="fotos"
-      className="scroll-mt-24 bg-[#eef7ed] py-16 sm:py-20"
+      className="scroll-mt-24 bg-[#fff0f6] py-16 sm:py-20"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
@@ -64,7 +64,7 @@ export default function Gallery({ gallery }) {
               key={photo.image}
               type="button"
               onClick={() => setSelectedIndex(index)}
-              className="group relative overflow-hidden rounded-2xl text-left focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
+              className="group relative overflow-hidden rounded-2xl text-left focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#d94d91] focus-visible:ring-offset-2"
               aria-label={`Ampliar foto: ${photo.alt}`}
             >
               <img
@@ -74,7 +74,7 @@ export default function Gallery({ gallery }) {
                 className="h-36 w-full object-cover transition duration-500 group-hover:scale-110 sm:h-40 lg:h-48"
               />
 
-              <span className="absolute inset-0 flex items-center justify-center bg-emerald-950/0 text-white transition group-hover:bg-emerald-950/35">
+              <span className="absolute inset-0 flex items-center justify-center bg-[#593a31]/0 text-white transition group-hover:bg-[#593a31]/35">
                 <Maximize2
                   size={25}
                   className="opacity-0 transition group-hover:opacity-100"
@@ -93,7 +93,7 @@ export default function Gallery({ gallery }) {
       {/* MODAL */}
       {isOpen && selectedPhoto && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-emerald-950/95 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-[#593a31]/95 p-4 backdrop-blur-sm"
           role="dialog"
           aria-modal="true"
           aria-label="Visualização da galeria"
