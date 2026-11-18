@@ -84,10 +84,7 @@ export default function Gallery({ gallery }) {
           ))}
         </div>
 
-        <p className="mt-5 text-center text-xs text-stone-500">
-          Imagens ilustrativas nesta demonstração. Substitua por fotos
-          autorizadas do espaço e dos cães atendidos.
-        </p>
+
       </div>
 
       {/* MODAL */}

@@ -20,6 +20,8 @@ import {
 } from 'lucide-react'
 import { guardianApi } from '../services/api'
 
+import imgLogo from '../assets/imgLogo.png'
+
 const input =
   'w-full rounded-xl border border-[#eadbd3] bg-white px-4 py-3 text-sm text-[#593a31] outline-none transition focus:border-[#d94d91] focus:ring-2 focus:ring-[#d94d91]/10'
 
@@ -85,8 +87,12 @@ function Navbar({ loggedIn = false, onLogout }) {
     <header className="sticky top-0 z-50 border-b border-[#f0e2da] bg-white/95 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
         <Link to="/" className="flex items-center gap-3">
-          <div className="grid h-11 w-11 place-items-center rounded-2xl bg-[#fce2ed] text-[#d94d91]">
-            <PawPrint size={24} />
+          <div className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-2xl bg-white p-1 shadow-sm">
+            <img
+              src={imgLogo}
+              alt="Logo Recanto da Dinda"
+              className="h-full w-full object-contain"
+            />
           </div>
 
           <div>
@@ -228,7 +234,11 @@ function Footer() {
         <div>
           <div className="flex items-center gap-3">
             <div className="grid h-11 w-11 place-items-center rounded-2xl bg-white/10 text-[#f5a9cb]">
-              <PawPrint size={24} />
+              <img
+                src={imgLogo}
+                alt="Logo Recanto da Dinda"
+                className="h-full w-full object-contain"
+              />
             </div>
 
             <div>
@@ -895,7 +905,11 @@ export default function GuardianPortal() {
 
           <div className="p-7 sm:p-10 lg:p-12">
             <div className="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-[#fce2ed] text-[#d94d91]">
-              <PawPrint size={30} />
+              <img
+                src={imgLogo}
+                alt="Logo Recanto da Dinda"
+                className="h-full w-full object-contain"
+              />
             </div>
 
             <h1 className="mt-6 text-center text-3xl font-black text-[#593a31]">
@@ -1089,3 +1103,4 @@ export default function GuardianPortal() {
     </div>
   )
 }
+

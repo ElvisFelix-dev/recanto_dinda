@@ -5,6 +5,8 @@ import {
   MessageCircle,
 } from "lucide-react";
 
+import imgLogo from '../../assets/imgLogo.png'
+
 export default function Footer({ navItems, whatsappLink }) {
   return (
     <footer className="bg-[#593a31] text-white">
@@ -15,12 +17,16 @@ export default function Footer({ navItems, whatsappLink }) {
           className="flex items-center gap-3"
           aria-label="Recanto da Dinda - voltar ao início"
         >
-          <span className="grid h-12 w-12 place-items-center rounded-2xl bg-white/10 text-[#efb5cf]">
-            <PawPrint size={28} />
+          <span className="grid h-12 w-12 place-items-center rounded-2xl bg-white/10 text-[#d94d91]">
+            <img
+                          src={imgLogo}
+                          alt="Logo Recanto da Dinda"
+                          className="h-full w-full object-contain"
+                        />
           </span>
 
           <span>
-            <strong className="block text-lg font-black">
+            <strong className="home-logo block text-3xl font-normal leading-none">
               Recanto da Dinda
             </strong>
 

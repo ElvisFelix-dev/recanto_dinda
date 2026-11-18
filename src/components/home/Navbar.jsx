@@ -37,11 +37,11 @@ export default function Navbar({
           </span>
 
           <span className="leading-none">
-            <span className="block text-lg font-black tracking-tight text-[#593a31]">
-              Recanto
+            <span className="home-logo block text-[1.8rem] leading-[0.8] text-[#593a31]">
+              Recanto da Dinda
             </span>
-            <span className="mt-1 block text-sm font-extrabold italic text-[#8b5a49]">
-              da Dinda
+            <span className="mt-1 block text-[9px] font-extrabold uppercase tracking-[0.22em] text-[#8b5a49]">
+              Hotel · Creche · Daycare
             </span>
           </span>
         </a>

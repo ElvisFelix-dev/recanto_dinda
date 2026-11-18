@@ -22,7 +22,7 @@ export default function Hero({ photos, whatsappLink }) {
             Creche e hotel para cães
           </div>
 
-          <h1 className="max-w-2xl text-4xl font-black leading-[1.05] tracking-tight text-[#593a31] sm:text-5xl lg:text-6xl">
+          <h1 className="home-display max-w-2xl text-4xl font-bold leading-[1.12] tracking-tight text-[#593a31] sm:text-5xl lg:text-6xl">
             Um segundo lar para o seu{" "}
             <span className="relative inline-block text-[#a65f7d]">
               melhor amigo
