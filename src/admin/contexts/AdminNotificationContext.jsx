@@ -47,7 +47,7 @@ export function AdminNotificationProvider({ children }) {
     socket.on('admin:notification', (notification) => {
       setNotifications((current) => [notification, ...current.filter((item) => item._id !== notification._id)].slice(0, 30))
       if (!notification.readAt) setUnreadCount((current) => current + 1)
-      if (notification.type === 'new_pet') {
+      if (['new_pet', 'new_testimonial'].includes(notification.type)) {
         showToast({ type: 'info', title: notification.title, message: notification.message, duration: 6000 })
       }
     })

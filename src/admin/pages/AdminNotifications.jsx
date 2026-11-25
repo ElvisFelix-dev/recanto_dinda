@@ -8,6 +8,7 @@ import {
   ExternalLink,
   LoaderCircle,
   PawPrint,
+  MessageSquareQuote,
   Smartphone,
   RefreshCw,
   CheckCircle2,
@@ -344,7 +345,7 @@ export default function AdminNotifications() {
                     ? 'bg-[#fce2ed] text-[#d94d91]'
                     : 'bg-[#f7eee9] text-[#8b5a49]'
                 }`}>
-                  <PawPrint size={20} />
+                  {item.type === 'new_testimonial' ? <MessageSquareQuote size={20} /> : <PawPrint size={20} />}
                 </div>
 
                 {/* CONTEÚDO */}
