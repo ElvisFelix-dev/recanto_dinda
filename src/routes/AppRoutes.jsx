@@ -20,6 +20,7 @@ import AdminNotifications from '../admin/pages/AdminNotifications'
 import HotelBookings from '../admin/pages/HotelBookings'
 import HotelBookingDetails from '../admin/pages/HotelBookingDetails'
 import Attendance from '../admin/pages/Attendance'
+import AdminTestimonials from '../admin/pages/AdminTestimonials'
 
 export default function AppRoutes() {
   return (
@@ -37,6 +38,7 @@ export default function AppRoutes() {
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminDashboard />} />
             <Route path="cadastros" element={<Registrations />} />
+            <Route path="depoimentos" element={<AdminTestimonials />} />
             <Route path="cadastros/:id" element={<RegistrationDetails />} />
             <Route path="tutores/:id" element={<GuardianDetails />} />
             <Route path="relatorios" element={<AdminReports />} />

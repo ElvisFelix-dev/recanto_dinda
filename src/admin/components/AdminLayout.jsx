@@ -1,5 +1,5 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, PawPrint, LogOut, Menu, X, Dog, Users, Activity, FileBarChart2, Bell, Hotel, CalendarCheck } from 'lucide-react'
+import { LayoutDashboard, PawPrint, LogOut, Menu, X, Dog, Users, Activity, FileBarChart2, Bell, Hotel, CalendarCheck, MessageSquareQuote } from 'lucide-react'
 import { useState } from 'react'
 import { useAdminAuth } from '../contexts/AdminAuthContext'
 import { ToastProvider } from '../contexts/ToastContext'
@@ -17,6 +17,7 @@ export default function AdminLayout() {
     { to: '/admin/cadastros', label: 'Cadastros de pets', icon: PawPrint },
     { to: '/admin/hotel', label: 'Hospedagens', icon: Hotel },
     { to: '/admin/frequencia', label: 'Frequência', icon: CalendarCheck },
+    { to: '/admin/depoimentos', label: 'Depoimentos', icon: MessageSquareQuote },
     { to: '/admin/relatorios', label: 'Relatórios', icon: FileBarChart2 },
     { to: '/admin/notificacoes', label: 'Notificações', icon: Bell },
     ...(admin?.role === 'admin' ? [

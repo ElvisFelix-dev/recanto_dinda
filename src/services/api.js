@@ -241,6 +241,12 @@ export const guardianApi = {
     }),
   me: () => guardianRequest('/guardian/me'),
   attendance: () => guardianRequest('/guardian/me/attendance'),
+  getTestimonials: () => guardianRequest('/guardian/testimonials'),
+  createTestimonial: (payload) =>
+    guardianRequest('/guardian/testimonials', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    }),
 }
 
 async function guardianRequest(endpoint, options = {}) {
@@ -269,4 +275,43 @@ async function guardianRequest(endpoint, options = {}) {
   }
 
   return data
+}
+
+
+// API de depoimentos: endpoints públicos e administrativos.
+export const testimonialApi = {
+  getPublicTestimonials: async (params = {}) => {
+    const query = queryString(params)
+    let response
+    try {
+      response = await fetch(`${API_URL}/testimonials${query ? `?${query}` : ''}`)
+    } catch {
+      throw new Error('Não foi possível carregar os depoimentos.')
+    }
+    const data = await response.json().catch(() => ({}))
+    if (!response.ok) throw new Error(data.message || 'Não foi possível carregar os depoimentos.')
+    return data
+  },
+  getAdminTestimonials: (params = {}) => {
+    const query = queryString(params)
+    return apiRequest(`/admin/testimonials${query ? `?${query}` : ''}`)
+  },
+  getTestimonial: (id) => apiRequest(`/admin/testimonials/${id}`),
+  createTestimonial: (payload) =>
+    apiRequest('/admin/testimonials', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    }),
+  updateTestimonial: (id, payload) =>
+    apiRequest(`/admin/testimonials/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(payload),
+    }),
+  updateTestimonialStatus: (id, status) =>
+    apiRequest(`/admin/testimonials/${id}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status }),
+    }),
+  deleteTestimonial: (id) =>
+    apiRequest(`/admin/testimonials/${id}`, { method: 'DELETE' }),
 }

@@ -17,10 +17,13 @@ import {
   CheckCircle2,
   Timer,
   CalendarCheck,
+  Star,
+  Send,
+  MessageSquareText,
 } from 'lucide-react'
 import { guardianApi } from '../services/api'
 
-import imgLogo from '../assets/imgLogo.png'
+import imgLogo from "../assets/imgLogo.png";
 
 const input =
   'w-full rounded-xl border border-[#eadbd3] bg-white px-4 py-3 text-sm text-[#593a31] outline-none transition focus:border-[#d94d91] focus:ring-2 focus:ring-[#d94d91]/10'
@@ -87,12 +90,12 @@ function Navbar({ loggedIn = false, onLogout }) {
     <header className="sticky top-0 z-50 border-b border-[#f0e2da] bg-white/95 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
         <Link to="/" className="flex items-center gap-3">
-          <div className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-2xl bg-white p-1 shadow-sm">
+          <div className="grid h-11 w-11 place-items-center rounded-2xl bg-[#fce2ed] text-[#d94d91]">
             <img
-              src={imgLogo}
-              alt="Logo Recanto da Dinda"
-              className="h-full w-full object-contain"
-            />
+                          src={imgLogo}
+                          alt="Recanto da Dinda"
+                          className="h-9 w-9 object-contain"
+                        />
           </div>
 
           <div>
@@ -235,10 +238,10 @@ function Footer() {
           <div className="flex items-center gap-3">
             <div className="grid h-11 w-11 place-items-center rounded-2xl bg-white/10 text-[#f5a9cb]">
               <img
-                src={imgLogo}
-                alt="Logo Recanto da Dinda"
-                className="h-full w-full object-contain"
-              />
+                            src={imgLogo}
+                            alt="Recanto da Dinda"
+                            className="h-9 w-9 object-contain"
+                          />
             </div>
 
             <div>
@@ -471,12 +474,89 @@ export default function GuardianPortal() {
   const [attendanceSearch, setAttendanceSearch] = useState('')
   const [attendanceFilter, setAttendanceFilter] = useState('all')
 
+  // Depoimentos enviados pelo tutor
+  const [testimonials, setTestimonials] = useState([])
+  const [testimonialPetId, setTestimonialPetId] = useState('')
+  const [testimonialText, setTestimonialText] = useState('')
+  const [testimonialRating, setTestimonialRating] = useState(5)
+  const [authorizeText, setAuthorizeText] = useState(false)
+  const [authorizeImage, setAuthorizeImage] = useState(false)
+  const [testimonialBusy, setTestimonialBusy] = useState(false)
+  const [testimonialLoading, setTestimonialLoading] = useState(false)
+  const [testimonialError, setTestimonialError] = useState('')
+  const [testimonialSuccess, setTestimonialSuccess] = useState('')
+
+
+  const loadGuardianTestimonials = async () => {
+    setTestimonialLoading(true)
+    setTestimonialError('')
+
+    try {
+      const response = await guardianApi.getTestimonials()
+      const items = response?.data?.testimonials || response?.testimonials || response?.data || []
+      setTestimonials(Array.isArray(items) ? items : [])
+    } catch (e) {
+      setTestimonials([])
+      setTestimonialError(e.message || 'Não foi possível carregar seus depoimentos.')
+    } finally {
+      setTestimonialLoading(false)
+    }
+  }
+
+  const submitTestimonial = async (e) => {
+    e.preventDefault()
+    setTestimonialError('')
+    setTestimonialSuccess('')
+
+    if (!testimonialPetId) {
+      setTestimonialError('Selecione o pet que representará seu depoimento.')
+      return
+    }
+
+    if (!testimonialText.trim()) {
+      setTestimonialError('Escreva seu depoimento antes de enviar.')
+      return
+    }
+
+    if (!authorizeText || !authorizeImage) {
+      setTestimonialError('Confirme as duas autorizações para continuar.')
+      return
+    }
+
+    setTestimonialBusy(true)
+
+    try {
+      await guardianApi.createTestimonial({
+        petId: testimonialPetId,
+        text: testimonialText.trim(),
+        rating: testimonialRating,
+        authorization: {
+          testimonial: authorizeText,
+          petImage: authorizeImage,
+          source: 'guardian_portal',
+        },
+      })
+
+      setTestimonialText('')
+      setTestimonialRating(5)
+      setAuthorizeText(false)
+      setAuthorizeImage(false)
+      setTestimonialSuccess('Depoimento enviado! Ele ficará aguardando a aprovação da equipe.')
+      await loadGuardianTestimonials()
+    } catch (e) {
+      setTestimonialError(e.message || 'Não foi possível enviar seu depoimento.')
+    } finally {
+      setTestimonialBusy(false)
+    }
+  }
+
   const load = async () => {
     try {
       const response = await guardianApi.me()
 
       setData(response.data)
       setError('')
+      loadGuardianTestimonials()
     } catch (e) {
       localStorage.removeItem('guardianToken')
       setData(null)
@@ -859,6 +939,184 @@ export default function GuardianPortal() {
               </div>
             )}
           </section>
+
+          {/* Depoimentos do tutor */}
+          <section className="mt-8 rounded-3xl border border-[#f0e2da] bg-white p-5 shadow-sm sm:p-7">
+            <div className="flex items-start gap-3">
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-[#fce2ed] text-[#d94d91]">
+                <MessageSquareText size={21} />
+              </span>
+              <div>
+                <h2 className="text-lg font-bold text-[#593a31]">Conte sua experiência</h2>
+                <p className="mt-1 text-sm leading-relaxed text-[#98796d]">
+                  Seu carinho também pode inspirar outras famílias. Envie um depoimento e escolha
+                  qual pet aparecerá junto à sua mensagem.
+                </p>
+              </div>
+            </div>
+
+            <form onSubmit={submitTestimonial} className="mt-6 space-y-5">
+              <div>
+                <label className="mb-2 block text-xs font-bold text-[#80665c]">
+                  Pet que representará o depoimento
+                </label>
+                <select
+                  value={testimonialPetId}
+                  onChange={(e) => setTestimonialPetId(e.target.value)}
+                  className={input}
+                  required
+                >
+                  <option value="">Selecione um pet</option>
+                  {(data.pets || []).filter((pet) => pet.status === 'approved').map((pet) => (
+                    <option key={pet._id} value={pet._id}>{pet.name}</option>
+                  ))}
+                </select>
+                <p className="mt-2 text-xs text-[#98796d]">
+                  Apenas pets aprovados no cadastro podem ser selecionados.
+                </p>
+              </div>
+
+              <div>
+                <label className="mb-2 block text-xs font-bold text-[#80665c]">
+                  Como foi sua experiência no Recanto?
+                </label>
+                <textarea
+                  value={testimonialText}
+                  onChange={(e) => setTestimonialText(e.target.value)}
+                  rows={4}
+                  maxLength={1000}
+                  placeholder="Conte um pouquinho sobre os cuidados, a equipe e os momentos do seu pet..."
+                  className={input + ' resize-y'}
+                  required
+                />
+                <p className="mt-1 text-right text-xs text-[#98796d]">
+                  {testimonialText.length}/1000
+                </p>
+              </div>
+
+              <div>
+                <span className="mb-2 block text-xs font-bold text-[#80665c]">Sua avaliação</span>
+                <div className="flex items-center gap-1" role="group" aria-label="Avaliação de 1 a 5 estrelas">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      type="button"
+                      onClick={() => setTestimonialRating(star)}
+                      aria-label={`${star} ${star === 1 ? 'estrela' : 'estrelas'}`}
+                      className="rounded-lg p-1 transition hover:scale-110"
+                    >
+                      <Star
+                        size={27}
+                        className={star <= testimonialRating ? 'fill-[#f4b740] text-[#f4b740]' : 'text-[#d9c9c1]'}
+                      />
+                    </button>
+                  ))}
+                  <span className="ml-2 text-sm font-semibold text-[#80665c]">
+                    {testimonialRating}/5
+                  </span>
+                </div>
+              </div>
+
+              <div className="space-y-3 rounded-2xl bg-[#fff8f3] p-4">
+                <p className="text-xs font-bold text-[#593a31]">Autorizações de publicação</p>
+                <label className="flex cursor-pointer items-start gap-3 text-sm leading-relaxed text-[#80665c]">
+                  <input
+                    type="checkbox"
+                    checked={authorizeText}
+                    onChange={(e) => setAuthorizeText(e.target.checked)}
+                    className="mt-1 accent-[#d94d91]"
+                  />
+                  Autorizo a publicação do texto do meu depoimento no site do Recanto da Dinda.
+                </label>
+                <label className="flex cursor-pointer items-start gap-3 text-sm leading-relaxed text-[#80665c]">
+                  <input
+                    type="checkbox"
+                    checked={authorizeImage}
+                    onChange={(e) => setAuthorizeImage(e.target.checked)}
+                    className="mt-1 accent-[#d94d91]"
+                  />
+                  Autorizo o uso da foto do pet selecionado junto ao depoimento.
+                </label>
+              </div>
+
+              {testimonialError && (
+                <p role="alert" className="rounded-xl bg-rose-50 p-3 text-sm text-rose-700">
+                  {testimonialError}
+                </p>
+              )}
+              {testimonialSuccess && (
+                <p role="status" className="rounded-xl bg-emerald-50 p-3 text-sm text-emerald-700">
+                  {testimonialSuccess}
+                </p>
+              )}
+
+              <button
+                type="submit"
+                disabled={testimonialBusy || !(data.pets || []).some((pet) => pet.status === 'approved')}
+                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#d94d91] px-5 py-3.5 text-sm font-bold text-white shadow-lg shadow-[#d94d91]/20 transition hover:bg-[#bd3d7b] disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
+              >
+                <Send size={17} />
+                {testimonialBusy ? 'Enviando...' : 'Enviar depoimento'}
+              </button>
+            </form>
+
+            <div className="mt-8 border-t border-[#f0e2da] pt-6">
+              <h3 className="font-bold text-[#593a31]">Meus depoimentos</h3>
+              {testimonialLoading ? (
+                <p className="mt-3 text-sm text-[#98796d]">Carregando seus depoimentos...</p>
+              ) : testimonials.length ? (
+                <div className="mt-4 space-y-3">
+                  {testimonials.map((item) => {
+                    const pet = item.pet || item.petSnapshot || {}
+                    const status = item.status || 'pending'
+                    const statusLabel = {
+                      pending: 'Aguardando aprovação',
+                      approved: 'Aprovado',
+                      rejected: 'Não aprovado',
+                      hidden: 'Oculto',
+                    }[status] || status
+
+                    return (
+                      <article key={item._id} className="rounded-2xl border border-[#f0e2da] p-4">
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                          <div className="flex items-center gap-3">
+                            {pet.avatar?.url ? (
+                              <img src={pet.avatar.url} alt={pet.name || 'Pet'} className="h-11 w-11 rounded-xl object-cover" />
+                            ) : (
+                              <span className="grid h-11 w-11 place-items-center rounded-xl bg-[#fce2ed] text-[#d94d91]">
+                                <Dog size={21} />
+                              </span>
+                            )}
+                            <div>
+                              <p className="font-bold text-[#593a31]">{pet.name || 'Meu pet'}</p>
+                              <div className="mt-1 flex items-center gap-0.5">
+                                {[1, 2, 3, 4, 5].map((star) => (
+                                  <Star key={star} size={12} className={star <= (item.rating || 5) ? 'fill-[#f4b740] text-[#f4b740]' : 'text-[#d9c9c1]'} />
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                          <span className="rounded-full bg-[#fce2ed] px-3 py-1.5 text-xs font-bold text-[#b63b78]">
+                            {statusLabel}
+                          </span>
+                        </div>
+                        <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-[#80665c]">{item.text}</p>
+                        {item.adminNote && (
+                          <p className="mt-3 rounded-xl bg-[#fff8f3] p-3 text-xs text-[#80665c]">
+                            <strong>Observação da equipe:</strong> {item.adminNote}
+                          </p>
+                        )}
+                      </article>
+                    )
+                  })}
+                </div>
+              ) : (
+                <p className="mt-3 text-sm text-[#98796d]">
+                  Você ainda não enviou nenhum depoimento. Quando enviar, poderá acompanhar a aprovação por aqui.
+                </p>
+              )}
+            </div>
+          </section>
         </main>
 
         <Footer />
@@ -905,11 +1163,7 @@ export default function GuardianPortal() {
 
           <div className="p-7 sm:p-10 lg:p-12">
             <div className="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-[#fce2ed] text-[#d94d91]">
-              <img
-                src={imgLogo}
-                alt="Logo Recanto da Dinda"
-                className="h-full w-full object-contain"
-              />
+              <PawPrint size={30} />
             </div>
 
             <h1 className="mt-6 text-center text-3xl font-black text-[#593a31]">
@@ -1103,4 +1357,3 @@ export default function GuardianPortal() {
     </div>
   )
 }
-

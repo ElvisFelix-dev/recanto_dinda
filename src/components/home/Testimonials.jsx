@@ -8,36 +8,46 @@ export default function Testimonials({ testimonials = [], whatsappLink }) {
         <SectionHeading
           eyebrow="Carinho que cria vínculos"
           title="Histórias de quem faz parte do Recanto"
-          description="Cada pet tem seu jeitinho e cada família tem uma história. Queremos compartilhar experiências reais de quem já conhece nosso espaço."
+          description="Cada pet tem seu jeitinho e cada família tem uma história. Conheça algumas experiências de quem já faz parte do Recanto."
         />
 
         {testimonials.length > 0 ? (
           <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {testimonials.map((item, index) => (
+            {testimonials.map((item) => (
               <article
-                key={`${item.guardian}-${item.pet}-${index}`}
+                key={item._id}
                 className="flex h-full flex-col rounded-3xl border border-[#f0e2da] bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
               >
                 <div className="flex items-center justify-between">
                   <span className="rounded-full bg-[#fce2ed] p-3 text-[#d94d91]">
                     <Quote size={21} />
                   </span>
-                  {item.rating && (
-                    <div className="flex gap-1" aria-label={`${item.rating} de 5 estrelas`}>
-                      {Array.from({ length: item.rating }).map((_, starIndex) => (
-                        <Star key={starIndex} size={15} className="fill-[#d94d91] text-[#d94d91]" />
-                      ))}
-                    </div>
-                  )}
+                  <div className="flex gap-1" aria-label={`${item.rating || 5} de 5 estrelas`}>
+                    {Array.from({ length: Number(item.rating) || 5 }).map((_, index) => (
+                      <Star key={index} size={15} className="fill-[#d94d91] text-[#d94d91]" />
+                    ))}
+                  </div>
                 </div>
 
                 <p className="mt-5 flex-1 leading-7 text-stone-600">
                   “{item.text}”
                 </p>
 
-                <div className="mt-6 border-t border-stone-100 pt-4">
-                  <p className="font-semibold text-[#593a31]">{item.guardian}</p>
-                  <p className="mt-1 text-sm text-stone-500">Tutor(a) do(a) {item.pet}</p>
+                <div className="mt-6 flex items-center gap-3 border-t border-stone-100 pt-4">
+                  {item.pet?.avatar ? (
+                    <img
+                      src={item.pet.avatar}
+                      alt={item.pet.name || "Pet"}
+                      className="h-12 w-12 rounded-full border-2 border-[#f4c9da] object-cover"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#fce2ed] text-lg">🐾</div>
+                  )}
+                  <div>
+                    <p className="font-semibold text-[#593a31]">{item.pet?.name || "Nosso aumiguinho"}</p>
+                    {item.pet?.breed && <p className="mt-1 text-sm text-stone-500">{item.pet.breed}</p>}
+                  </div>
                 </div>
               </article>
             ))}
@@ -51,15 +61,13 @@ export default function Testimonials({ testimonials = [], whatsappLink }) {
               A próxima história pode ser a sua
             </h3>
             <p className="mx-auto mt-2 max-w-xl leading-7 text-stone-600">
-              Estamos preparando este espaço para publicar relatos reais das famílias
-              que fazem parte do Recanto. Se você já conhece nosso trabalho, conte
-              sua experiência para a equipe.
+              Estamos preparando este espaço para compartilhar relatos reais das famílias que fazem parte do Recanto.
             </p>
             <a
               href={whatsappLink}
               target="_blank"
               rel="noreferrer"
-              className="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-[#593a31] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#245640]"
+              className="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-[#593a31] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#765044]"
             >
               <MessageCircle size={18} />
               Compartilhar minha experiência

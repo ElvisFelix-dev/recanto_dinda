@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "../components/home/Navbar";
 import Hero from "../components/home/Hero";
 import Highlights from "../components/home/Highlights";
@@ -21,13 +21,30 @@ import {
   navItems,
   highlights,
   faqs,
-  testimonials,
 } from "../data/homeData";
 
 import { whatsappLink } from "../utils/whatsapp";
+import { testimonialApi } from "../services/api";
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [publicTestimonials, setPublicTestimonials] = useState([]);
+
+  useEffect(() => {
+    let active = true;
+
+    testimonialApi.getPublicTestimonials({ limit: 12 })
+      .then((response) => {
+        const items = Array.isArray(response?.data) ? response.data : [];
+        if (active) setPublicTestimonials(items);
+      })
+      .catch((error) => {
+        console.error("[Home] Não foi possível carregar depoimentos:", error);
+        if (active) setPublicTestimonials([]);
+      });
+
+    return () => { active = false; };
+  }, []);
 
   return (
     <div className="home-page min-h-screen overflow-hidden bg-[#fff8f3] font-body text-stone-800">
@@ -47,7 +64,7 @@ export default function Home() {
         <Gallery gallery={gallery} />
 
         <Testimonials
-          testimonials={testimonials}
+          testimonials={publicTestimonials}
           whatsappLink={whatsappLink}
         />
 
